@@ -22,7 +22,7 @@ export default function Course({course}) {
       />
       <ParkingSpaceList
         locked={false}
-        title={course.title}
+        mall={course}
       />
       <Modal />
     </>

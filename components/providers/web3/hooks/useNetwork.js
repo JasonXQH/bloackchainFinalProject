@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import useSWR from "swr"
+import {DEVELOPMENT} from "../../../../networkconfig"
 const NETWORKS = {
   1: "Ethereum Main Network",
   3: "Ropsten Test Network",
@@ -10,7 +11,7 @@ const NETWORKS = {
   1337: "Ganache",
 }
 
-const targetNetwork = NETWORKS[3]
+const targetNetwork = NETWORKS[DEVELOPMENT]
 
 export const handler = (web3, provider) => () => {
 

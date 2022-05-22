@@ -21,7 +21,7 @@ function fetchCurrencies() {
       })
       .catch((error) => console.error("FETCH ERROR:", error));
   }
-export const Parking_PRICE_PER_HOUR = 15
+export const PARKING_PRICE_PER_HOUR = 15
 
 fetchCurrencies()
 const fetcher = async url => {
@@ -37,7 +37,7 @@ export const useEthPrice = () => {
     { refreshInterval: 10000 }
   )
 
-  const perItem = (data && (Parking_PRICE_PER_HOUR /( USD_to_CNY*Number(data))).toFixed(6)) ?? null
+  const perItem = (data && (PARKING_PRICE_PER_HOUR /( USD_to_CNY*Number(data))).toFixed(6)) ?? null
   const usdNum = USD_to_CNY
   return { eth: { data, perItem,usdNum, ...rest}}
 }

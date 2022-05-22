@@ -1,6 +1,6 @@
 
 
-import { useEthPrice, COURSE_PRICE  } from "@components/hooks/useEthPrice"
+import { useEthPrice, PARKING_PRICE_PER_HOUR  } from "@components/hooks/useEthPrice"
 import { Loader } from "@components/ui/common"
 import Image from "next/image"
 export default function EthRates() {
@@ -47,7 +47,7 @@ export default function EthRates() {
                       src="/small-eth.webp"
                     />
                     <span className="text-2xl font-bold">
-                      = {COURSE_PRICE}￥
+                      = {PARKING_PRICE_PER_HOUR}￥
                     </span>
                   </> :
                   <div className="w-full flex justify-center">

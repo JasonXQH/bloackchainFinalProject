@@ -3,14 +3,17 @@
 import { CourseCard, CourseList } from "@components/ui/course"
 import { BaseLayout } from "@components/ui/layout"
 import { getAllCourses } from "@content/courses/fetcher"
+import { EthRates, WalletBar } from "@components/ui/web3"
 import { useWalletInfo } from "@components/hooks/web3"
 import { useEthPrice } from "@components/hooks/useEthPrice"
 import { Button } from "@components/ui/common"
+
 import { MarketHeader } from "@components/ui/marketplace"
 import Link from "next/link"
 export default function Marketplace({courses}) {
 
-  const { canPurchaseCourse } = useWalletInfo()
+  const { account, network, canPurchaseCourse } = useWalletInfo()
+  const { eth } = useEthPrice()
 
 
   return (
