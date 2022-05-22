@@ -1,0 +1,61 @@
+[
+  {
+    "id": "1",
+    "type": "K11",
+    "title": "K11地下停车场",
+    "description": "K11是全球首个品牌率先把艺术·人文·自然三大核心元素融合，将艺术欣赏、人文体验、自然环保完美结合和互动，带出无限创意、自由及个性化的生活品牌，并为大众带来前所未有的感官体验。",
+    "coverImage": "https://images.unsplash.com/photo-1602071799790-f4a31de6c016?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870",
+    "link": "https://www.k11.com/corp/zh-hans/art-sc/",
+    "slug": "k11",
+    "wsl": [
+      "收费规则: 15元/小时. 当日消费满500元免一小时",
+      "黑卡会员：商场营业时间(10:00-22:00） 可免费停车，其余时间正常收费",
+      "金卡会员：1000积分兑换一小时免费停车时间，每日至多使用4小时免费停车。",
+      "服务设施: 无充电桩 无立体停车位 不支持自动抬杆"
+    ],
+    "createdAt": ""
+  },
+  {
+    "id": "2",
+    "type": "环球港",
+    "title": "环球港地下停车场",
+    "description": "上海环球港（Global Harbor），位于上海市普陀区中山北路3300号，南邻宁夏路，东依凯旋北路，西靠中山北路和上海内环线，是普陀区的地标建筑",
+    "coverImage": "https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2017/03/21/1200/Hyatt-Regency-Shanghai-Global-Harbor-P004-Exterior.jpg/Hyatt-Regency-Shanghai-Global-Harbor-P004-Exterior.16x9.jpg?imwidth=1920",
+    "link": "https://www.yuexing.cn/yxsy.shtml",
+    "slug": "hqg",
+    "wsl": [
+       "收费规则: 地下停车库收费15元/小时, 会员每500积分抵扣1小时免费停车",
+       "服务设施: 无充电桩 无立体停车位 不支持自动抬杆"
+    ],
+    "createdAt": ""
+  },
+  {
+    "id": "3",
+    "type": "环贸IAPM",
+    "title": "环贸地下停车场",
+    "description": "由新鸿基地产开发的环贸iapm商场座落于浦西淮海中路陕西南路商业区，面积逾12万平方米，自2013年8月初试业，轨道交通一号线、十号线及十二号线均可抵达。",
+    "coverImage": "https://www.thatsmags.com/image/view/201704/timgK3KFJ0SZ.jpg",
+    "link": "https://baike.baidu.com/item/%E7%8E%AF%E8%B4%B8iapm%E5%95%86%E5%9C%BA/9558687?fr=aladdin",
+    "slug": "iapm",
+    "wsl": [
+        "收费规则: 第1小时RMB15， 第2小时起，10元/30分钟；超过8小时，24小时内，155元。顾客凡于环贸iapm商场消费满指定金额，可享有每日最多3小时免费泊车优惠。（详情请咨询礼宾台)",
+        "服务设施: 无充电桩 无立体停车位 不支持自动抬杆"
+     ],
+    "createdAt": ""
+  },
+  {
+    "id": "4",
+    "type": "长宁来福士",
+    "title": "来福士环贸停车场",
+    "description": "长宁来福士广场是一个大型广场，坐落于上海中山公园商圈的核心区域，占地逾6万平方米，其中地上总建筑面积近24万平方米，总投资额约为96亿人民币。根据中国购物中心等级评价标准2019年评定为国家五星购物中心",
+    "coverImage": "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimagepphcloud.thepaper.cn%2Fpph%2Fimage%2F65%2F463%2F864.jpg&refer=http%3A%2F%2Fimagepphcloud.thepaper.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1655693406&t=57c39da47df960ae7ae438092a462bf5",
+    "link": "https://www.capitaland.com.cn/lease/offices-listingrafflescitychangning-copy-copy.html",
+    "slug": "raffles-city",
+    "wsl": [
+       "收费: 停车每满1小时，收费10元 ; 凯德星会员200积分可抵扣1小时停车费",
+       "服务设施: 无充电桩 无立体停车位 不支持自动抬杆"
+    ],
+    "createdAt": ""
+  }
+  
+]
