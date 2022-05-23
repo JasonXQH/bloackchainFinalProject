@@ -5,7 +5,7 @@ import {
   Tips
 } from "@components/ui/course";
 import { BaseLayout } from "@components/ui/layout";
-import { getAllCourses } from "@content/courses/fetcher";
+import { getAllParkings } from "@content/courses/fetcher";
 
 export default function Course({course}) {
   return (
@@ -30,7 +30,7 @@ export default function Course({course}) {
 }
 
 export function getStaticPaths() {
-  const { data } = getAllCourses()
+  const { data } = getAllParkings()
 
   return {
     paths: data.map(c => ({
@@ -44,7 +44,7 @@ export function getStaticPaths() {
 
 
 export function getStaticProps({params}) {
-  const { data } = getAllCourses()
+  const { data } = getAllParkings()
   const course = data.filter(c => c.slug === params.slug)[0]
 
   return {

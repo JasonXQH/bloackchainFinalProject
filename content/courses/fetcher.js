@@ -1,11 +1,11 @@
 
-import courses from "./index.json"
+import parking from "./index.json"
 
-export const getAllCourses = () => {
+export const getAllParkings = () => {
 
   return {
-    data: courses,
-    courseMap: courses.reduce((a, c, i) => {
+    data: parking,
+    courseMap: parking.reduce((a, c, i) => {
       a[c.id] = c
       a[c.id].index = i
       return a

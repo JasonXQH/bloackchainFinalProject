@@ -25,12 +25,12 @@ export default function Card({course,  disabled,Footer}) {
           <Link href={course.link}>
             <a
               target="_blank" 
-              className="block mt-1 text-lg leading-tight font-medium text-black hover:underline">
+              className="block mt-1 text-sm sm:text-lg leading-tight font-medium text-black hover:underline">
               {course.title}
             </a>
           </Link>
           <p
-            className="mt-2 text-gray-500">
+            className="mt-2 text-sm sm:text-base text-gray-500">
             {course.description}
           </p>
           { Footer &&

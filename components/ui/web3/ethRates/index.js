@@ -8,33 +8,30 @@ export default function EthRates() {
 
 
     return (
-      <div className="grid grid-cols-3">
-        <div className="flex flex-1 items-stretch text-center">
-          <div className="p-10 border drop-shadow rounded-md">
-            <div className="flex items-center">
-            { eth.data ?
-              <>
-                <Image
-                  layout="fixed"
-                  height="35"
-                  width="35"
-                  src="/small-eth.webp"
-                />
-                <span className="text-2xl font-bold">
-                  = {eth.data}$
-                </span>
-              </> :
-              <div className="w-full flex justify-center">
-                <Loader size="md" />
-              </div>
-            }
+      <div className="flex flex-col xs:flex-row text-center">
+      <div className="p-6 border drop-shadow rounded-md mr-2">
+        <div className="flex items-center justify-center">
+          { eth.data ?
+            <>
+              <Image
+                layout="fixed"
+                height="35"
+                width="35"
+                src="/small-eth.webp"
+              />
+              <span className="text-2xl font-bold">
+                = {eth.data}$
+              </span>
+            </> :
+            <div className="w-full flex justify-center">
+              <Loader size="md" />
             </div>
-            <p className="text-xl text-gray-500">Current eth Price</p>
+          }
           </div>
+          <p className="text-lg text-gray-500">Current eth Price</p>
         </div>
-        <div className="flex flex-1 items-stretch text-center">
-          <div className="p-10 border drop-shadow rounded-md"> 
-              <div className="flex items-center">
+        <div className="p-6 border drop-shadow rounded-md">
+          <div className="flex items-center justify-center">
                 { eth.data ?
                   <>
                     <span className="text-2xl font-bold">
@@ -54,14 +51,13 @@ export default function EthRates() {
                     <Loader size="md" />
                   </div>
                 }
-            </div>
-            <p className="text-xl text-gray-500">参考小时价</p>
+           
           </div>
-          
+          <p className="text-xl text-gray-500">参考每小时停车价格</p>
         </div>
-        <div className="flex flex-1 items-stretch text-center">
-          <div className="p-10 border drop-shadow rounded-md"> 
-              <div className="flex items-center">
+
+        <div className="p-6 border drop-shadow rounded-md">
+          <div className="flex items-center justify-center">
                 {
                   eth.usdNum?
                   <>
@@ -73,10 +69,8 @@ export default function EthRates() {
                     <Loader size="md" />
                   </div>
                 }
-            </div>
-            <p className="text-xl text-gray-500">人民币-美元汇率</p>
           </div>
-          
+          <p className="text-xl text-gray-500">人民币-美元汇率</p>
         </div>
       </div>
     )

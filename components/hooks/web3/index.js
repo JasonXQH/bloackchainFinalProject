@@ -21,6 +21,12 @@ export const useAccount = () => {
     account: swrRes
   }
 }
+export const useOwnedParking = (...args) => {
+  const swrRes = enhanceHook(useHooks(hooks => hooks.useOwnedParking)(...args))
+  return {
+    ownedParking: swrRes
+  }
+}
 
 export const useWalletInfo = () => {
   const { account } = useAccount()

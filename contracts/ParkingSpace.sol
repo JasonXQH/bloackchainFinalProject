@@ -13,33 +13,58 @@ interface test {
 contract ParkingSpace {
     //车位状态[已拥有(永久)、可预订(空闲)、已预订]
     enum State {
-        Purchased,
         Booked,
         Available
     }
     test timeCalculator;
 
+
     struct Space {
         uint256 id; // 在合约中的编码
         bytes16 parkNumber; // 车位编号(商场ID+车位编号，如: 01A001表明K11商场A001号车位)
         uint256 startTimeStamp; // 开始租赁的时间 unix毫秒
-        uint256 price; // 租金
-        bytes32 proof; // 32
+        uint256 price; // 定金
+        bytes32 proof; // bytes32
         address owner; // 使用权所有者
         bool valid;
         State state; // 1
     }
+    struct General {
+        bytes16 parkNumber; // 车位编号(商场ID+车位编号，如: 01A001表明K11商场A001号车位)
+        address owner; // 拥有权(默认都是owner的)
+        State state; // 1
+    }
+
+    Space[] OwnedParkings;
+    General[] ParkingPool;
+
+    string[] private   mallNumberList;
+    string[] private spaceNumberList;
+
     // mapping of parkHash to Parking Space
     mapping(bytes32 => Space) private bookedParkingSpace;
     // mapping of parkNumber to parkHash
     mapping(uint256 => bytes32) private bookedParkingSpaceHash;
+    mapping(bytes16 => General) private GeneralSpaceMapper;
     // number of all booked Parking Space
     uint256 private totalBookedParkingSpace;
-
     address payable private owner;
 
     constructor() {
         setContractOwner(msg.sender);
+        _getMallNumberList();
+        _getSpaceNumberList();
+        for(uint8 i = 0;i<mallNumberList.length;i++){
+            for(uint8 j=0;j<spaceNumberList.length;j++){ 
+                bytes16  parkNumber = bytes16(bytes(string.concat(mallNumberList[i],spaceNumberList[j])));
+                GeneralSpaceMapper[parkNumber] = General({
+                    parkNumber: parkNumber,
+                    owner: owner,
+                    state: State.Available
+                });
+                ParkingPool.push(GeneralSpaceMapper[parkNumber]);
+            }
+        }
     }
 
     error ParkHasOwner();
@@ -53,7 +78,7 @@ contract ParkingSpace {
         _;
     }
 
-    function releasePark(bytes16 _parkNumber) public onlyOwner {
+    function releasePark(bytes16 _parkNumber) public {
         //获取哈希值
         bytes32 parkHash = keccak256(abi.encodePacked(_parkNumber, msg.sender));
         //如果不存在，直接返回
@@ -62,8 +87,24 @@ contract ParkingSpace {
         }
         Space memory target = bookedParkingSpace[parkHash];
         // 如果存在,删除映射关系
-        delete bookedParkingSpace[parkHash];
-        delete bookedParkingSpaceHash[target.id];
+        uint256 parkIndex = target.id;
+        uint256 lastParkIndex = OwnedParkings.length-1;
+        if(parkIndex==lastParkIndex){
+            OwnedParkings.pop();
+            delete bookedParkingSpace[parkHash];
+            delete bookedParkingSpaceHash[parkIndex];
+        }else{
+            // 最后一个换上来
+            OwnedParkings[parkIndex] = OwnedParkings[lastParkIndex];
+            OwnedParkings.pop();
+            //修改 两个map
+            bytes32 lastParkHash = keccak256(abi.encodePacked(OwnedParkings[parkIndex].parkNumber, msg.sender));
+            bookedParkingSpaceHash[parkIndex] = lastParkHash;
+            // 删除被删除元素的映射index
+            delete bookedParkingSpace[parkHash];
+            delete bookedParkingSpaceHash[parkIndex];
+        }
+        GeneralSpaceMapper[_parkNumber].state =  State.Available;
         totalBookedParkingSpace--;
     }
 
@@ -84,6 +125,7 @@ contract ParkingSpace {
             revert ParkHasOwner();
         }
 
+
         uint256 id = totalBookedParkingSpace++;
         bookedParkingSpaceHash[id] = parkHash;
         bookedParkingSpace[parkHash] = Space({
@@ -96,6 +138,8 @@ contract ParkingSpace {
             startTimeStamp: block.timestamp,
             state: State.Booked
         });
+        GeneralSpaceMapper[_parkNumber].state =  State.Booked;
+        OwnedParkings.push(bookedParkingSpace[parkHash]);
         return parkHash;
     }
 
@@ -114,6 +158,14 @@ contract ParkingSpace {
         return totalBookedParkingSpace;
     }
 
+   // 获取当前有的车位数量(使用权)
+    function getOwnedParkList() external view returns (Space[] memory) {
+        return OwnedParkings;
+    }
+    //获取所有停车场信息
+    function getParkingPool() external view returns (General[] memory) {
+        return ParkingPool;
+    }
     // 用index获取parkHash
     function getParkHashAtIndex(uint256 index) external view returns (bytes32) {
         return bookedParkingSpaceHash[index];
@@ -137,4 +189,25 @@ contract ParkingSpace {
     function hasParkOwnership(bytes32 _parkHash) private view returns (bool) {
         return bookedParkingSpace[_parkHash].owner == msg.sender;
     }
+
+    function _getMallNumberList() private {
+        mallNumberList.push("01");
+        mallNumberList.push("02");
+        mallNumberList.push("03");
+        mallNumberList.push("04");
+    }
+     function _getSpaceNumberList() private {
+       spaceNumberList.push("A001");
+       spaceNumberList.push("A002");
+       spaceNumberList.push("A003");
+       spaceNumberList.push("A004");
+       spaceNumberList.push("A005");
+       spaceNumberList.push("A006");
+       spaceNumberList.push("A007");
+       spaceNumberList.push("A008");
+       spaceNumberList.push("A009");
+       spaceNumberList.push("A010");
+    }
+
+
 }

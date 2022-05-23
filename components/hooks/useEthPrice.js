@@ -4,10 +4,6 @@ const api = "https://api.exchangerate-api.com/v4/latest/USD";
 const URL = "https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false"
 var USD_to_CNY = 0
 function fetchCurrencies() {
-    const primary = "USD";
-    const secondary = "CNY";
-    const amount = 1;
-    // Important: Include your API key below
     fetch(api)
       .then((response) => {
         if (response.ok) {

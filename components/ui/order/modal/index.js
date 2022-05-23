@@ -12,7 +12,7 @@ const defaultOrder = {
 
 const _createFormState = (isDisabled = false, message =  "") => ({isDisabled, message})
 
-const createFormState = ({price, email, confirmationEmail}, hasAgreedTOS) => {
+const createFormState = ({price, number}, hasAgreedTOS) => {
   if (!price || Number(price) <= 0) {
     return _createFormState(true, "Price is not valid.")
   }
@@ -26,7 +26,7 @@ const createFormState = ({price, email, confirmationEmail}, hasAgreedTOS) => {
 }
 
 
-export default function OrderModal({number,mall,onClose, onSubmit}) {
+export default function OrderModal({number,mall, onClose, onSubmit}) {
   const [isOpen, setIsOpen] = useState(false)
   const [order, setOrder] = useState(defaultOrder)
   const { eth } = useEthPrice()
@@ -149,6 +149,7 @@ export default function OrderModal({number,mall,onClose, onSubmit}) {
           <Button
               disabled={formState.isDisabled}
               onClick={() => {
+                setIsOpen(false)
                 onSubmit(order)
             }}>
               Submit

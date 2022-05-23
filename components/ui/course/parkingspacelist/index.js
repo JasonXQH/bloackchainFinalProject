@@ -5,22 +5,18 @@ import { OrderModal } from "@components/ui/order"
 import { useWeb3 } from "@components/providers"
 import { useWalletInfo } from "@components/hooks/web3"
 const Web3Utils = require('web3-utils');
-const space_list = [
-  "A001",
-  "A002",
-  "A003",
-  "A004",
-  "A005",
-  "A006",
-  "A007",
-  "A008",
-  "A009",
-]
+
+const STATE_COLORS = {
+  purchased: "indigo",
+  activated: "green",
+  deactivated: "red"
+}
+
 
 export default function ParkingSpaceList({locked,mall}) {
 
   const { web3, contract } = useWeb3()
-  const { canPurchaseCourse, account } = useWalletInfo()
+  const { account } = useWalletInfo()
   const [selectedNumber, setSelectedNumber] = useState(null)
 
   var parkNumber = mall.id+selectedNumber
@@ -53,7 +49,6 @@ export default function ParkingSpaceList({locked,mall}) {
         hexParkId,
         proof
       ).send({from: account.data, value})
-      console.log(result)
     } catch {
       console.error("Purchase course: Operation has failed.")
     }
@@ -81,7 +76,7 @@ export default function ParkingSpaceList({locked,mall}) {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  { space_list.map(number =>
+                  { mall.space_list.map(number =>
                     <tr key={number}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">

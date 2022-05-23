@@ -2,8 +2,7 @@
 
 import { CourseCard, CourseList } from "@components/ui/course"
 import { BaseLayout } from "@components/ui/layout"
-import { getAllCourses } from "@content/courses/fetcher"
-import { EthRates, WalletBar } from "@components/ui/web3"
+import { getAllParkings } from "@content/courses/fetcher"
 import { useWalletInfo } from "@components/hooks/web3"
 import { useEthPrice } from "@components/hooks/useEthPrice"
 import { Button } from "@components/ui/common"
@@ -50,7 +49,7 @@ export default function Marketplace({courses}) {
 }
 
 export function getStaticProps() {
-  const { data } = getAllCourses()
+  const { data } = getAllParkings()
   return {
     props: {
       courses: data
