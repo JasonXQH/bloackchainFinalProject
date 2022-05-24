@@ -2,22 +2,12 @@
 
 pragma solidity >=0.4.18 <0.9.0;
 
-interface test {
-    //这里面的方法一定要是我们调用的B合约中的test方法，参数什么的也都保持一致。
-    //因为是interface，所以函数必须声明为external
-    function timeCalculator(address _to, uint256 _value)
-        external
-        returns (bool);
-}
-
 contract ParkingSpace {
     //车位状态[已拥有(永久)、可预订(空闲)、已预订]
     enum State {
         Booked,
         Available
     }
-    test timeCalculator;
-
 
     struct Space {
         uint256 id; // 在合约中的编码
@@ -31,38 +21,45 @@ contract ParkingSpace {
     }
     struct General {
         bytes16 parkNumber; // 车位编号(商场ID+车位编号，如: 01A001表明K11商场A001号车位)
-        address owner; // 拥有权(默认都是owner的)
+        address owner; // 所有权(默认都是owner的)，租出去的时候是用户的，归还的时候是合约作者的
         State state; // 1
     }
 
     Space[] OwnedParkings;
     General[] ParkingPool;
 
-    string[] private   mallNumberList;
+    string[] private mallNumberList;
     string[] private spaceNumberList;
 
     // mapping of parkHash to Parking Space
     mapping(bytes32 => Space) private bookedParkingSpace;
     // mapping of parkNumber to parkHash
     mapping(uint256 => bytes32) private bookedParkingSpaceHash;
-    mapping(bytes16 => General) private GeneralSpaceMapper;
+    mapping(bytes16 => uint256) private GeneralArrayRetreiver;
     // number of all booked Parking Space
     uint256 private totalBookedParkingSpace;
+    uint256 private ParkingSpaceCount = 0;
     address payable private owner;
 
     constructor() {
         setContractOwner(msg.sender);
         _getMallNumberList();
         _getSpaceNumberList();
-        for(uint8 i = 0;i<mallNumberList.length;i++){
-            for(uint8 j=0;j<spaceNumberList.length;j++){ 
-                bytes16  parkNumber = bytes16(bytes(string.concat(mallNumberList[i],spaceNumberList[j])));
-                GeneralSpaceMapper[parkNumber] = General({
-                    parkNumber: parkNumber,
-                    owner: owner,
-                    state: State.Available
-                });
-                ParkingPool.push(GeneralSpaceMapper[parkNumber]);
+        for (uint8 i = 0; i < mallNumberList.length; i++) {
+            for (uint8 j = 0; j < spaceNumberList.length; j++) {
+                bytes16 parkNumber = bytes16(
+                    bytes(string.concat(mallNumberList[i], spaceNumberList[j]))
+                );
+                GeneralArrayRetreiver[parkNumber] = ParkingSpaceCount;
+                ParkingPool.push(
+                    General({
+                        parkNumber: parkNumber,
+                        owner: owner,
+                        state: State.Available
+                    })
+                );
+                GeneralArrayRetreiver[parkNumber] = ParkingSpaceCount;
+                ParkingSpaceCount++;
             }
         }
     }
@@ -88,23 +85,29 @@ contract ParkingSpace {
         Space memory target = bookedParkingSpace[parkHash];
         // 如果存在,删除映射关系
         uint256 parkIndex = target.id;
-        uint256 lastParkIndex = OwnedParkings.length-1;
-        if(parkIndex==lastParkIndex){
+        uint256 lastParkIndex = OwnedParkings.length - 1;
+        if (parkIndex == lastParkIndex) {
             OwnedParkings.pop();
             delete bookedParkingSpace[parkHash];
             delete bookedParkingSpaceHash[parkIndex];
-        }else{
+        } else {
             // 最后一个换上来
             OwnedParkings[parkIndex] = OwnedParkings[lastParkIndex];
             OwnedParkings.pop();
             //修改 两个map
-            bytes32 lastParkHash = keccak256(abi.encodePacked(OwnedParkings[parkIndex].parkNumber, msg.sender));
+            bytes32 lastParkHash = keccak256(
+                abi.encodePacked(
+                    OwnedParkings[parkIndex].parkNumber,
+                    msg.sender
+                )
+            );
             bookedParkingSpaceHash[parkIndex] = lastParkHash;
             // 删除被删除元素的映射index
             delete bookedParkingSpace[parkHash];
             delete bookedParkingSpaceHash[parkIndex];
         }
-        GeneralSpaceMapper[_parkNumber].state =  State.Available;
+        ParkingPool[GeneralArrayRetreiver[_parkNumber]].owner = owner;
+        ParkingPool[GeneralArrayRetreiver[_parkNumber]].state = State.Available;
         totalBookedParkingSpace--;
     }
 
@@ -125,7 +128,7 @@ contract ParkingSpace {
             revert ParkHasOwner();
         }
 
-
+        ParkingPool[GeneralArrayRetreiver[_parkNumber]].owner = msg.sender;
         uint256 id = totalBookedParkingSpace++;
         bookedParkingSpaceHash[id] = parkHash;
         bookedParkingSpace[parkHash] = Space({
@@ -138,8 +141,8 @@ contract ParkingSpace {
             startTimeStamp: block.timestamp,
             state: State.Booked
         });
-        GeneralSpaceMapper[_parkNumber].state =  State.Booked;
         OwnedParkings.push(bookedParkingSpace[parkHash]);
+        ParkingPool[GeneralArrayRetreiver[_parkNumber]].state = State.Booked;
         return parkHash;
     }
 
@@ -158,14 +161,26 @@ contract ParkingSpace {
         return totalBookedParkingSpace;
     }
 
-   // 获取当前有的车位数量(使用权)
+    // 获取当前有的车位数量(使用权)
     function getOwnedParkList() external view returns (Space[] memory) {
         return OwnedParkings;
     }
+
     //获取所有停车场信息
     function getParkingPool() external view returns (General[] memory) {
         return ParkingPool;
     }
+
+    //获取某一车位general的信息
+    function getGeneralParking(string memory _parkNumberString)
+        external
+        view
+        returns (General memory)
+    {
+        bytes16 key = bytes16(bytes(_parkNumberString));
+        return ParkingPool[GeneralArrayRetreiver[key]];
+    }
+
     // 用index获取parkHash
     function getParkHashAtIndex(uint256 index) external view returns (bytes32) {
         return bookedParkingSpaceHash[index];
@@ -196,18 +211,17 @@ contract ParkingSpace {
         mallNumberList.push("03");
         mallNumberList.push("04");
     }
-     function _getSpaceNumberList() private {
-       spaceNumberList.push("A001");
-       spaceNumberList.push("A002");
-       spaceNumberList.push("A003");
-       spaceNumberList.push("A004");
-       spaceNumberList.push("A005");
-       spaceNumberList.push("A006");
-       spaceNumberList.push("A007");
-       spaceNumberList.push("A008");
-       spaceNumberList.push("A009");
-       spaceNumberList.push("A010");
+
+    function _getSpaceNumberList() private {
+        spaceNumberList.push("A001");
+        spaceNumberList.push("A002");
+        spaceNumberList.push("A003");
+        spaceNumberList.push("A004");
+        spaceNumberList.push("A005");
+        spaceNumberList.push("A006");
+        spaceNumberList.push("A007");
+        spaceNumberList.push("A008");
+        spaceNumberList.push("A009");
+        spaceNumberList.push("A010");
     }
-
-
 }

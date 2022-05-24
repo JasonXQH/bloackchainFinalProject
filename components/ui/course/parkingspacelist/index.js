@@ -3,25 +3,37 @@ import { Button } from "@components/ui/common"
 import { useState } from "react"
 import { OrderModal } from "@components/ui/order"
 import { useWeb3 } from "@components/providers"
-import { useWalletInfo } from "@components/hooks/web3"
+// import { useWalletInfo } from "@components/hooks/web3"
+import { useWalletInfo,useAccount, useOwnedParking,useParkingPool } from "@components/hooks/web3";
 const Web3Utils = require('web3-utils');
 
-const STATE_COLORS = {
-  purchased: "indigo",
-  activated: "green",
-  deactivated: "red"
+const PARK_STATES = {
+   "Booked": "bg-red-100 text-red-800",
+   "Available":"bg-green-100 text-green-800"
 }
-
-
-export default function ParkingSpaceList({locked,mall}) {
-
-  const { web3, contract } = useWeb3()
+export default function  ParkingSpaceList({locked,mall,parkings}) {
+  
+  const { web3, contract } = useWeb3() 
   const { account } = useWalletInfo()
   const [selectedNumber, setSelectedNumber] = useState(null)
-
+  const { parkingPool } = useParkingPool(parkings,account.data)
+  
   var parkNumber = mall.id+selectedNumber
-  // exp: parkNumber: 01A003
-
+  var afterFiltered = parkingPool.data? parkingPool.data.filter(ob=>ob.mallid==mall.id):undefined
+  console.log(afterFiltered?afterFiltered:undefined)
+  // var afterMapper =mall.space_list.map(number =>{
+  //   afterFiltered? {number:afterFiltered?.filter(ob=>{ob.location==number})}:"none"
+  // })
+// location: "A001"
+// mallid: 1
+// owner: "0x55d1492fc00938Be60DC896B02a055f23f415A43"
+// state: "Available"
+for(let i = 0;i<mall.space_list.length;i++){
+  var parkNumber =  mall.id+mall.space_list[i]
+  const { ownedParking } =  useOwnedParking(parkNumber,account.data)
+  console.log(ownedParking.data?"找到了!"+ownedParking.data.parkNumber+"owner"+ownedParking.data.owner:undefined)
+  continue
+}
   const purchaseCourse = async order => {
     const hexParkId =Web3Utils.utf8ToHex(parkNumber)
     // exp: hexParkId: 0x303141303033
@@ -45,7 +57,7 @@ export default function ParkingSpaceList({locked,mall}) {
     const value = web3.utils.toWei(String(order.price))
 
     try {
-      const result = await contract.methods.bookPark(
+      const result =  contract.methods.bookPark(
         hexParkId,
         proof
       ).send({from: account.data, value})
@@ -76,38 +88,51 @@ export default function ParkingSpaceList({locked,mall}) {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  { mall.space_list.map(number =>
-                    <tr key={number}>
+                  { afterFiltered?.map(ob =>
+                    <tr key={ob.location}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {number}
+                              {ob.location}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={
-                            locked ?
-                             `bg-red-100 text-red-800 ${statusClass}` :
-                             `bg-green-100 text-green-800 ${statusClass}`
-                          }
+                        <span 
+                          className={`${PARK_STATES[ob.state]} ${statusClass}`}
                         >
-                          { locked ? "Booked" : "Available" }
-
+                          {ob.state}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
  
-                        <div className="mt-1">
+                        {/* <div className="mt-1">
                         <Button
-                          onClick={() => setSelectedNumber(number)}
+                          onClick={() => setSelectedNumber(ob.location)}
                           variant="lightPurple">
-                          { locked ? "Release" : "Book" }
+                          {  "Release" : "Book" }
                           </Button>
-                        </div>
+                        </div> */}
+                      {ob.state=="Booked"&&ob.owner==account.data ?
+                       <>
+                        <span>
+                            Yours
+                          </span>
+                       </> :
+                       ob.state=="Booked"?
+                       <>
+                       <span>
+                           Others
+                         </span>
+                      </> :
+                      <Button
+                      onClick={() => setSelectedNumber(ob.location)}
+                      variant="lightPurple">
+                        Book
+                      </Button>
+                      }
                     </td>
                     </tr>
                   )}
@@ -130,3 +155,16 @@ export default function ParkingSpaceList({locked,mall}) {
 }
 
 
+async function getParkingPool(contractObj,fromAddr) {
+  let parkingPool = await contractObj.methods.getParkingPool().call({from:fromAddr});
+  return parkingPool;
+  }
+  function sleep(time){
+    var timeStamp = new Date().getTime();
+    var endTime = timeStamp + time;
+    while(true){
+    if (new Date().getTime() > endTime){
+     return;
+    } 
+    }
+   }

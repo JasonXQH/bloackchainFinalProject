@@ -3,9 +3,8 @@ import useSWR from "swr"
 const Web3Utils = require('web3-utils');
 
 export const PARK_STATES = {
-  0: "purchased",
-  1: "activated",
-  2: "deactivated",
+  0: "Booked",
+  1: "Available",
 }
 
 export const MALL_NUMBER = {
@@ -20,9 +19,11 @@ export const handler = (web3, contract) => (parkings, account) => {
       (web3 && contract && account) ? "web3/ownedParkings/${account}" : null,
       async () => {
         const ownedParkings = await contract.methods.getOwnedParkList().call()
-        const normaledParkings = []
+        const normaledOwnedParkings = []
         for (let i = 0; i < ownedParkings.length; i++) {
           var parking = ownedParkings[i]
+          if(parking.owner==account){continue}
+
           var parkNumber = Web3Utils.hexToUtf8(parking.parkNumber)
           var mallName = MALL_NUMBER[parseInt(parkNumber.substring(0,2))]
           var location = parkNumber.substring(2)
@@ -42,9 +43,9 @@ export const handler = (web3, contract) => (parkings, account) => {
             cumulative_cost: cumulative_cost,
             state: PARK_STATES[parseInt(parking.state)]
           }
-          normaledParkings.push(normal)
+          normaledOwnedParkings.push(normal)
         }
-        return normaledParkings
+        return normaledOwnedParkings
       }
     )
   

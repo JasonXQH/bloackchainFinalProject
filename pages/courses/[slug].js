@@ -7,22 +7,23 @@ import {
 import { BaseLayout } from "@components/ui/layout";
 import { getAllParkings } from "@content/courses/fetcher";
 
-export default function Course({course}) {
+export default  function Course({parking,data}) {
   return (
     <>
       <div className="py-4">
         <CourseHero
-          title={course.title}
-          description={course.description}
-          image={course.coverImage}
+          title={parking.title}
+          description={parking.description}
+          image={parking.coverImage}
         />
       </div>
       <Tips
-        points={course.wsl}
+        points={parking.wsl}
       />
       <ParkingSpaceList
         locked={false}
-        mall={course}
+        mall={parking}
+        parkings = {data}
       />
       <Modal />
     </>
@@ -45,11 +46,12 @@ export function getStaticPaths() {
 
 export function getStaticProps({params}) {
   const { data } = getAllParkings()
-  const course = data.filter(c => c.slug === params.slug)[0]
+  const parking = data.filter(c => c.slug === params.slug)[0]
 
   return {
     props: {
-      course
+      parking,
+      data
     }
   }
 }

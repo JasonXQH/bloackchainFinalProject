@@ -1,10 +1,22 @@
 
 import { useHooks } from "@components/providers/web3"
-
+const _isEmpty = data => {
+  return (
+    data == null ||
+    data === "" ||
+    (Array.isArray(data) && data.length === 0) ||
+    (data.constructor === Object && Object.keys(data).length === 0)
+  )
+}
 const enhanceHook = swrRes => {
+  const { data, error } = swrRes
+  const hasInitialResponse = !!(data || error)
+  const isEmpty = hasInitialResponse && _isEmpty(data)
+
   return {
     ...swrRes,
-    hasInitialResponse: swrRes.data || swrRes.error
+    isEmpty,
+    hasInitialResponse
   }
 }
 
@@ -21,10 +33,24 @@ export const useAccount = () => {
     account: swrRes
   }
 }
+export const useOwnedParkings = (...args) => {
+  const swrRes = enhanceHook(useHooks(hooks => hooks.useOwnedParkings)(...args))
+  return {
+    ownedParkings: swrRes
+  }
+}
+
 export const useOwnedParking = (...args) => {
   const swrRes = enhanceHook(useHooks(hooks => hooks.useOwnedParking)(...args))
   return {
     ownedParking: swrRes
+  }
+}
+
+export const useParkingPool = (...args) => {
+  const swrRes = enhanceHook(useHooks(hooks => hooks.useParkingPool)(...args))
+  return {
+    parkingPool: swrRes
   }
 }
 
