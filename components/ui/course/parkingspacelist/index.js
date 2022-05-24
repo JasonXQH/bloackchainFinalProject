@@ -3,8 +3,8 @@ import { Button } from "@components/ui/common"
 import { useState } from "react"
 import { OrderModal } from "@components/ui/order"
 import { useWeb3 } from "@components/providers"
-// import { useWalletInfo } from "@components/hooks/web3"
-import { useWalletInfo,useAccount, useOwnedParking,useParkingPool } from "@components/hooks/web3";
+
+import { useWalletInfo,useParkingPool } from "@components/hooks/web3";
 const Web3Utils = require('web3-utils');
 
 const PARK_STATES = {
@@ -20,21 +20,17 @@ export default function  ParkingSpaceList({locked,mall,parkings}) {
   
   var parkNumber = mall.id+selectedNumber
   var afterFiltered = parkingPool.data? parkingPool.data.filter(ob=>ob.mallid==mall.id):undefined
-  console.log(afterFiltered?afterFiltered:undefined)
-  // var afterMapper =mall.space_list.map(number =>{
-  //   afterFiltered? {number:afterFiltered?.filter(ob=>{ob.location==number})}:"none"
-  // })
 // location: "A001"
 // mallid: 1
 // owner: "0x55d1492fc00938Be60DC896B02a055f23f415A43"
 // state: "Available"
-for(let i = 0;i<mall.space_list.length;i++){
-  var parkNumber =  mall.id+mall.space_list[i]
-  const { ownedParking } =  useOwnedParking(parkNumber,account.data)
-  console.log(ownedParking.data?"找到了!"+ownedParking.data.parkNumber+"owner"+ownedParking.data.owner:undefined)
-  continue
-}
-  const purchaseCourse = async order => {
+// for(let i = 0;i<mall.space_list.length;i++){
+//   var parkNumber =  mall.id+mall.space_list[i]
+//   const { ownedParking } =  useOwnedParking(parkNumber,account.data)
+//   console.log(ownedParking.data?"找到了!"+ownedParking.data.parkNumber+"owner"+ownedParking.data.owner:undefined)
+//   continue
+// }
+  const bookParking = async order => {
     const hexParkId =Web3Utils.utf8ToHex(parkNumber)
     // exp: hexParkId: 0x303141303033
 
@@ -108,24 +104,21 @@ for(let i = 0;i<mall.space_list.length;i++){
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
  
-                        {/* <div className="mt-1">
-                        <Button
-                          onClick={() => setSelectedNumber(ob.location)}
-                          variant="lightPurple">
-                          {  "Release" : "Book" }
-                          </Button>
-                        </div> */}
                       {ob.state=="Booked"&&ob.owner==account.data ?
                        <>
-                        <span>
-                            Yours
-                          </span>
+                       <Button
+                       onClick={()=>window.open("/marketplace/parkings/owned","_self")}
+                      variant="purple">
+                        Yours
+                      </Button>
                        </> :
                        ob.state=="Booked"?
                        <>
-                       <span>
-                           Others
-                         </span>
+                       <Button
+                       disabled={true}
+                      variant="red">
+                        Others
+                      </Button>
                       </> :
                       <Button
                       onClick={() => setSelectedNumber(ob.location)}
@@ -146,25 +139,11 @@ for(let i = 0;i<mall.space_list.length;i++){
         <OrderModal
           number={selectedNumber}
           mall = {mall.title}
-          onSubmit={purchaseCourse}
+          onSubmit={bookParking}
           onClose={() => setSelectedNumber(null)}
         />
       }
     </section>
   )
 }
-
-
-async function getParkingPool(contractObj,fromAddr) {
-  let parkingPool = await contractObj.methods.getParkingPool().call({from:fromAddr});
-  return parkingPool;
-  }
-  function sleep(time){
-    var timeStamp = new Date().getTime();
-    var endTime = timeStamp + time;
-    while(true){
-    if (new Date().getTime() > endTime){
-     return;
-    } 
-    }
-   }
+ 

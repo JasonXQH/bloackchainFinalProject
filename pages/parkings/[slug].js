@@ -1,6 +1,6 @@
 import { Modal } from "@components/ui/common";
 import {
-  CourseHero,
+  ParkingHero,
   ParkingSpaceList,
   Tips
 } from "@components/ui/course";
@@ -11,7 +11,7 @@ export default  function Course({parking,data}) {
   return (
     <>
       <div className="py-4">
-        <CourseHero
+        <ParkingHero
           title={parking.title}
           description={parking.description}
           image={parking.coverImage}

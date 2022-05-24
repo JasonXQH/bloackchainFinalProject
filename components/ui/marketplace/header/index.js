@@ -6,10 +6,10 @@ const LINKS = [{
   href: "/marketplace",
   value: "主页"
 }, {
-  href: "/marketplace/courses/owned",
+  href: "/marketplace/parkings/owned",
   value: "我的预定"
 }, {
-  href: "/marketplace/courses/manage",
+  href: "/marketplace/parkings/manage",
   value: "管理车位"
 }]
 

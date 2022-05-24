@@ -13,9 +13,7 @@ export const handler = (web3, contract) => (parkings, account) => {
 
       async () => {
         const parkingPool = await contract.methods.getParkingPool().call()
-        // owner: "0x55d1492fc00938Be60DC896B02a055f23f415A43"
-        // parkNumber: "0x30314130303100000000000000000000"
-        // state: "1"
+
         
         for(let i = 0;i< parkingPool.length;i++){
             const parking = parkingPool[i]

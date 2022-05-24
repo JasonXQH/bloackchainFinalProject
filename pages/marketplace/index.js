@@ -1,37 +1,33 @@
 
 
-import { CourseCard, CourseList } from "@components/ui/course"
+import { ParkingCard, ParkingList } from "@components/ui/course"
 import { BaseLayout } from "@components/ui/layout"
 import { getAllParkings } from "@content/courses/fetcher"
 import { useWalletInfo } from "@components/hooks/web3"
-import { useEthPrice } from "@components/hooks/useEthPrice"
 import { Button } from "@components/ui/common"
-
 import { MarketHeader } from "@components/ui/marketplace"
 import Link from "next/link"
-export default function Marketplace({courses}) {
+export default function Marketplace({parkings}) {
 
   const { account, network, canPurchaseCourse } = useWalletInfo()
-  const { eth } = useEthPrice()
-
 
   return (
     <>
       <div className="py-4">
         <MarketHeader />
       </div>
-      <CourseList
-        courses={courses}
+      <ParkingList
+        parkings={parkings}
       >
         
-      {course =>
-        <CourseCard
-          key={course.id}
-          course={course}
+      {parking =>
+        <ParkingCard
+          key={parking.id}
+          parking={parking}
           disabled={!canPurchaseCourse}
           Footer={() =>
             <div className="mt-4">
-              <Link href={`/courses/${course.slug}`}>
+              <Link href={`/parkings/${parking.slug}`}>
               <Button  
                 variant="lightPurple"
                 disabled={!canPurchaseCourse}
@@ -43,7 +39,7 @@ export default function Marketplace({courses}) {
           }
         />
       }
-      </CourseList>
+      </ParkingList>
     </>
   )
 }
@@ -52,7 +48,7 @@ export function getStaticProps() {
   const { data } = getAllParkings()
   return {
     props: {
-      courses: data
+      parkings: data
     }
   }
 }

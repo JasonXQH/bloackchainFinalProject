@@ -7,8 +7,8 @@ import { getAllParkings } from "@content/courses/fetcher"
 export default function BookedParkingSpace({children,parking}) {
 
   const { eth } = useEthPrice()
-  console.log(parking)
-  const  coverImage = getAllParkings().data[parking.mallNumber-1].coverImage
+  // console.log(parking)
+  const  coverImage = getAllParkings().data[parking.mallNumber-1]?.coverImage
   return (
     <div className="bg-white border shadow overflow-hidden sm:rounded-lg mb-3">
       <div className="flex">

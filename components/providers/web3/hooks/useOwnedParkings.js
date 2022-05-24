@@ -22,8 +22,7 @@ export const handler = (web3, contract) => (parkings, account) => {
         const normaledOwnedParkings = []
         for (let i = 0; i < ownedParkings.length; i++) {
           var parking = ownedParkings[i]
-          if(parking.owner==account){continue}
-
+          if(parking.owner!=account){continue}
           var parkNumber = Web3Utils.hexToUtf8(parking.parkNumber)
           var mallName = MALL_NUMBER[parseInt(parkNumber.substring(0,2))]
           var location = parkNumber.substring(2)
@@ -34,6 +33,7 @@ export const handler = (web3, contract) => (parkings, account) => {
           var cumulative_cost = days*150+hours >10 ? 150 : Math.round(timeing_hour)*15
           var normal = {
             mallNumber: parseInt(parkNumber.substring(0,2)),
+            mallString: parkNumber.substring(0,2),
             mallName: mallName,
             location: location,
             owner: parking.owner, 

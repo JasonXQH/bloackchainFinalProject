@@ -75,7 +75,7 @@ contract ParkingSpace {
         _;
     }
 
-    function releasePark(bytes16 _parkNumber) public {
+    function releasePark(bytes16 _parkNumber) external payable {
         //获取哈希值
         bytes32 parkHash = keccak256(abi.encodePacked(_parkNumber, msg.sender));
         //如果不存在，直接返回
