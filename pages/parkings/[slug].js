@@ -3,7 +3,7 @@ import {
   ParkingHero,
   ParkingSpaceList,
   Tips
-} from "@components/ui/course";
+} from "@components/ui/parking";
 import { BaseLayout } from "@components/ui/layout";
 import { getAllParkings } from "@content/courses/fetcher";
 

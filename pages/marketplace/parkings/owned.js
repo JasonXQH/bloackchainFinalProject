@@ -1,5 +1,5 @@
 
-import { BookedParkingSpace } from "@components/ui/course";
+import { BookedParkingSpace } from "@components/ui/parking";
 import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
 import { useAccount, useOwnedParkings,useWalletInfo} from "@components/hooks/web3";

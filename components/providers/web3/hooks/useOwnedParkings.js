@@ -30,7 +30,9 @@ export const handler = (web3, contract) => (parkings, account) => {
           var days  = Math.floor(timeing_hour/24)
           var hours = timeing_hour%24
           console.log("days:"+days)
-          var cumulative_cost = days*150+hours >10 ? 150 : Math.round(timeing_hour)*15
+          var hour_price = hours >10 ? 150 : Math.round(timeing_hour)*15
+          var day_price  = days*150
+          var cumulative_cost = day_price + hour_price
           var normal = {
             mallNumber: parseInt(parkNumber.substring(0,2)),
             mallString: parkNumber.substring(0,2),

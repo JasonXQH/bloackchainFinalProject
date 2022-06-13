@@ -1,6 +1,6 @@
 
 
-import { ParkingCard, ParkingList } from "@components/ui/course"
+import { ParkingCard, ParkingList } from "@components/ui/parking"
 import { BaseLayout } from "@components/ui/layout"
 import { getAllParkings } from "@content/courses/fetcher"
 import { useWalletInfo } from "@components/hooks/web3"

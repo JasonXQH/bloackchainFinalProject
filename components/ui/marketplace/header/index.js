@@ -8,9 +8,6 @@ const LINKS = [{
 }, {
   href: "/marketplace/parkings/owned",
   value: "我的预定"
-}, {
-  href: "/marketplace/parkings/manage",
-  value: "管理车位"
 }]
 
 export default function Header() {

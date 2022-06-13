@@ -2,7 +2,7 @@
    
 
 import { Hero } from "@components/ui/common"
-import { ParkingList, ParkingCard } from "@components/ui/course"
+import { ParkingList, ParkingCard } from "@components/ui/parking"
 import { BaseLayout } from "@components/ui/layout"
 import { getAllParkings } from "@content/courses/fetcher"
 

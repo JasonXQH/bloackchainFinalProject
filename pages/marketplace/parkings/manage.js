@@ -1,5 +1,5 @@
 
-import {ParkingSpaceFilter, BookedParkingSpace } from "@components/ui/course";
+import {ParkingSpaceFilter, BookedParkingSpace } from "@components/ui/parking";
 import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
 import { Button } from "@components/ui/common"
