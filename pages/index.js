@@ -4,7 +4,7 @@
 import { Hero } from "@components/ui/common"
 import { ParkingList, ParkingCard } from "@components/ui/parking"
 import { BaseLayout } from "@components/ui/layout"
-import { getAllParkings } from "@content/courses/fetcher"
+import { getAllParkings } from "@content/parkings/fetcher"
 
 export default function Home({parkings}) {
   return (

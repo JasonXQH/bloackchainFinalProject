@@ -2,7 +2,7 @@
 import Image from "next/image"
 import Link from "next/link"
 
-export default function Card({parking,  disabled,Footer}) {
+export default function Card({parking,  disabled ,Footer}) {
   return (
     <div
       className="bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">

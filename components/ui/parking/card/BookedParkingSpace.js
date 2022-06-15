@@ -2,7 +2,7 @@
 import Image from "next/image"
 import {useEthPrice} from "@components/hooks/useEthPrice"
 // import 
-import { getAllParkings } from "@content/courses/fetcher"
+import { getAllParkings } from "@content/parkings/fetcher"
 
 export default function BookedParkingSpace({children,parking}) {
 

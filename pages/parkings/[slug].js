@@ -5,9 +5,9 @@ import {
   Tips
 } from "@components/ui/parking";
 import { BaseLayout } from "@components/ui/layout";
-import { getAllParkings } from "@content/courses/fetcher";
+import { getAllParkings } from "@content/parkings/fetcher";
 
-export default  function Course({parking,data}) {
+export default  function Parking({parking,data}) {
   return (
     <>
       <div className="py-4">
@@ -56,4 +56,4 @@ export function getStaticProps({params}) {
   }
 }
 
-Course.Layout = BaseLayout
+Parking.Layout = BaseLayout

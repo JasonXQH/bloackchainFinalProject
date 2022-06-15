@@ -2,7 +2,7 @@
 
 import { ParkingCard, ParkingList } from "@components/ui/parking"
 import { BaseLayout } from "@components/ui/layout"
-import { getAllParkings } from "@content/courses/fetcher"
+import { getAllParkings } from "@content/parkings/fetcher"
 import { useWalletInfo } from "@components/hooks/web3"
 import { Button } from "@components/ui/common"
 import { MarketHeader } from "@components/ui/marketplace"

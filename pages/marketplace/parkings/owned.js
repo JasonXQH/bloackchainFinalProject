@@ -4,7 +4,7 @@ import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
 import { useAccount, useOwnedParkings,useWalletInfo} from "@components/hooks/web3";
 import { Button } from "@components/ui/common";
-import { getAllParkings } from "@content/courses/fetcher";
+import { getAllParkings } from "@content/parkings/fetcher";
 import { useState } from "react"
 import { useWeb3 } from "@components/providers"
 import { ReleaseModal } from "@components/ui/order"
@@ -58,7 +58,7 @@ export default function OwnedCourses({parkings}) {
             <span>   </span>
             <Button 
             slug={parking}
-            onClick={()=>window.open(`/courses/${ parkings[parking.mallNumber-1].slug}`,"_self")}>
+            onClick={()=>window.open(`/parkings/${ parkings[parking.mallNumber-1].slug}`,"_self")}>
               查看车库状态
             </Button>
           </BookedParkingSpace>

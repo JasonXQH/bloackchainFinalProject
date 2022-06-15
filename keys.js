@@ -1,0 +1,3 @@
+export const INFURA_PROJECT_ID = "03b6b610e0a94fc68f9f124513c289d9"
+
+// export {INFURA_PROJECT_ID}
